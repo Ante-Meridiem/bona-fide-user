@@ -1,6 +1,5 @@
 //Jenkinsfile for Bona-Fide-User
 node{
-
 	stage('RELEASE CONFIRMATION'){
 		def inputMessage = "Please provide the RELEASE VERSION for Bona Fide User"
 		getBuildVersion()
@@ -24,7 +23,7 @@ node{
 		withCredentials([string(credentialsId: 'docker-hub-password', variable: 'dockerHubPassword')]) {
 			sh "docker login -u talk2linojoy -p ${dockerHubPassword}"	
 		}
-		bat "docker push talk2linojoy/bona-fide-user/${buildVersion}"
+		sh "docker push talk2linojoy/bona-fide-user/${buildVersion}"
 	}*/
 	
 	stage('STOP CONTAINER'){
@@ -43,7 +42,7 @@ node{
 	}
 	
 	stage('RUN CONTAINER'){
-		bat "docker run -d -p 9006:9006 --name bona_fide_user_container talk2linojoy/bona-fide-user/${buildVersion}"
+		sh "docker run -d -p 9006:9006 --name bona_fide_user_container talk2linojoy/bona-fide-user/${buildVersion}"
 		echo 'Waiting for a minute...' 
 		sleep 59
 		
