@@ -9,9 +9,10 @@ pipeline{
         }
         stages{
             stage('ADMIT RELEASE'){
+		    def inputMessage = "Please provide the RELEASE VERSION for Bona Fide User"
                 try{
                   timeout(time: 30, unit: 'MINUTES') {
-                    buildVersion = input(id: 'buildVersion', message: "${releaseConfirmationInputMessage}", parameters: [
+                    buildVersion = input(id: 'buildVersion', message: inputMessage, parameters: [
                     [$class: 'TextParameterDefinition', defaultValue: env.BUILD_VERSION , description: 'Build Version', name: 'Release Version']])
                   } 
                 }
