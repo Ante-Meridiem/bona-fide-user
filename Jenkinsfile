@@ -24,7 +24,7 @@ pipeline{
     }
 }
 def getBuildVersion(){
-	git credentialsId: 'bona-fide', url: 'git@github.com:Ante-Meridiem/Bona-Fide.git'
+	git credentialsId: 'bona-fide-user', url: 'git@github.com:Ante-Meridiem/Bona-Fide-User.git'
 	def masterCommit = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
 	def currentDate = sh(returnStdout: true, script: 'date +%Y-%m-%d').trim()
 	env.BUILD_VERSION = currentDate + "-" + masterCommit
