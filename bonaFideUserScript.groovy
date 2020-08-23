@@ -106,38 +106,25 @@ def performHealthCheck(){
   }
 
 def performCleanSlateProtocol() {
+    def imageRemovalErrorMessage = 'Error while removing images'
+    def containerRemovalErrorMessage = 'Error while removing containers'
     if (APPLICATION_RUNNING_STATUS == true) {
+	    try{
+	    	sh 'docker image prune -a -f'
+	    }
+	    catch(Exception e){
+	    	echo "${imageRemovalErrorMessage} ${e.getMessage()}"
+	    }
       sshagent(['bonaFideDeploymentAccess']) {      
-        final String containerImageId = sh(script: 'ssh -o StrictHostKeyChecking=no ec2-user@13.126.97.24 docker ps -q -f name="^bona_fide_user_container_old$"', returnStdout: true)
-		def containerRemovalErrorMessage = 'Error while removing bona_fide_user_container_old '
-		def containerImageRemovalErrorMessage = 'Error while removing bona_fide_user_container_old docker Image '
-		if(!containerImageId.isEmpty()){
-			try{
-				sh 'ssh -o StrictHostKeyChecking=no ec2-user@13.126.97.24 docker rm -f bona_fide_user_container_old '
-				echo 'Successfully removed the previous container ' 
-			}
-			catch(Exception e){
-				echo "${containerRemovalErrorMessage} ${e.getMessage()}"
-			}
-			try{
-				sh 'ssh -o StrictHostKeyChecking=no ec2-user@13.126.97.24 docker rmi -f $(docker inspect bona_fide_user_container_old --format=\'{{.Image}}\')'
-                		echo 'Successfully removed the previous container docker Image'
-            		}
-            		catch(Exception e) {
-            			echo "${containerImageRemovalErrorMessage} ${e.getMessage()}"
-            		}
-        	}
-     }
-    }
 	try{
-		sh(script: 'cd ..')
-		sh(script: 'rm -rf Bona-Fide-User')
-		sh(script: 'rm -rf Bona-Fide-User@tmp')
+		sh 'ssh -o StrictHostKeyChecking=no ec2-user@13.126.97.24 docker system prune -f'
+		echo 'Successfully removed all non-functional containers' 
 	}
 	catch(Exception e){
-		echo 'Error while deleting workspaces'
-	}
-	
+		echo "${containerRemovalErrorMessage} ${e.getMessage()}"
+	}		
+      }
+    }
 }
 
 return this
