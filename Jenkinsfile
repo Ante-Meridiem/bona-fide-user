@@ -5,7 +5,7 @@ pipeline {
     stage('BURN UP') {
       steps {
         script {
-          groovy = load "bonaFideScript.groovy"
+          groovy = load "bonaFideUserScript.groovy"
         }
       }
     }
