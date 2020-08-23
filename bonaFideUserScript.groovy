@@ -118,6 +118,7 @@ def performCleanSlateProtocol() {
       sshagent(['bonaFideDeploymentAccess']) {      
 	try{
 		sh 'ssh -o StrictHostKeyChecking=no ec2-user@13.126.97.24 docker system prune -f'
+		sh 'ssh -o StrictHostKeyChecking=no ec2-user@13.126.97.24 docker image prune -a -f'
 		echo 'Successfully removed all non-functional containers' 
 	}
 	catch(Exception e){
