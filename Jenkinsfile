@@ -1,6 +1,9 @@
 APPLICATION_RUNNING_STATUS = false
 pipeline {
   agent any
+  environment{
+    JENKINS_BUILD_URL = "http://13.235.2.41:9010/blue/organizations/jenkins/Bona-Fide-User/detail/Bona-Fide/${env.BUILD_NUMBER}/pipeline/"
+  }
   stages {
     stage('BURN UP') {
       steps {
@@ -81,6 +84,9 @@ pipeline {
         }
         failure{
             slackSend channel: '#bona-fide-production-deployment', color: 'danger', message: "Deployment Failed for Service: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", teamDomain: 'bona-fide-co', tokenCredentialId: 'slackIntegrationIdForSendingNotification'
+        }
+        aborted{
+            slackSend channel: '#bona-fide-production-deployment', color: 'warning', message: "Deployment Aborted for Service: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.JENKINS_BUILD_URL}|Open>)", teamDomain: 'bona-fide-co', tokenCredentialId: 'slackIntegrationIdForSendingNotification'
         }
     }
  }
