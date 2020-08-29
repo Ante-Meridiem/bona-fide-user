@@ -1,5 +1,5 @@
 def getReleaseConfirmation() {
-  slackSend channel: "#bona-fide-production-deployment", message: "Deployment Started for Service: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)",teamDomain: 'bona-fide-co', tokenCredentialId: 'slackIntegrationIdForSendingNotification'
+  slackSend channel: "#bona-fide-production-deployment", message: "Deployment Started for Service: ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.JENKINS_BUILD_URL}|Open>)",teamDomain: 'bona-fide-co', tokenCredentialId: 'slackIntegrationIdForSendingNotification'
   def inputMessage = "Please provide the release version for Bona Fide User"
   getBuildVersion()
   timeout(time: 30, unit: 'MINUTES') {
